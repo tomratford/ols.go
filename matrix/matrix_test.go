@@ -9,7 +9,7 @@ func TestTranspose(t *testing.T) {
 	t.Run("transpose of the identity is the identity", func(t *testing.T) {
 		m := [][]int {
 			{1,0,0},
-				{0,1,},
+				{0,1,0},
 				{0,0,1},
 			}
 
