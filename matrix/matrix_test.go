@@ -20,4 +20,20 @@ func TestTranspose(t *testing.T) {
 			t.Errorf("expected transpose of the identity to be the same, got %v", got)
 		}
 	})
+
+	t.Run("transpose of a simple two by two", func(t *testing.T) {
+		m := [][]int{
+			{2,3},
+			{8,1},
+		}
+		got := Transpose(m)
+		want := [][]int{
+			{2,8},
+			{3,1},
+		}
+
+		if !reflect.DeepEqual(got, want) {
+			t.Errorf("expected to be the same, got %v, want %v", got, want)
+		}
+	})
 }
