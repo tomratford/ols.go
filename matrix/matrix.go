@@ -1,6 +1,6 @@
 package matrix
 
-type matrix = [][]int
+type matrix = [][]float64
 
 func Transpose(m matrix) matrix {
 	m2 := make(matrix, len(m), len(m))

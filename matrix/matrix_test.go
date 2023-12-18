@@ -7,7 +7,7 @@ import (
 
 func TestTranspose(t *testing.T) {
 	t.Run("transpose of the identity is the identity", func(t *testing.T) {
-		m := [][]int {
+		m := matrix{
 			{1,0,0},
 				{0,1,0},
 				{0,0,1},
@@ -22,12 +22,12 @@ func TestTranspose(t *testing.T) {
 	})
 
 	t.Run("transpose of a simple two by two", func(t *testing.T) {
-		m := [][]int{
+		m := matrix{
 			{2,3},
 			{8,1},
 		}
 		got := Transpose(m)
-		want := [][]int{
+		want := matrix{
 			{2,8},
 			{3,1},
 		}
