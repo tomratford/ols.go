@@ -3,5 +3,11 @@ package matrix
 type matrix = [][]int
 
 func Transpose(m matrix) matrix {
-	return m
+	m2 := make(matrix, len(m), len(m))
+	for _, v1 := range m {
+		for j, v2 := range v1 {
+			m2[j] = append(m2[j], v2)
+		}
+	}
+	return m2
 }
