@@ -8,17 +8,18 @@ import (
 
 type matrix = [][]float64
 
+// This value is used for comparisons to check for fuzz
 var Fuzz = 1.0e-15
 
-// Modifies matrix M in place
-func fuzzCheck(m matrix) {
-	p := len(m)
-	q := len(m[0])
+// WARN: modifies matrix `x` in place
+func fuzzCheck(x matrix) {
+	p := len(x)
+	q := len(x[0])
 
 	for i:=0;i<p;i++ {
 		for j:=0;j<q;j++ {
-			if math.Abs(m[i][j]) < Fuzz {
-				m[i][j] = 0.0
+			if math.Abs(x[i][j]) < Fuzz {
+				x[i][j] = 0.0
 			}
 		}
 	}
@@ -26,26 +27,27 @@ func fuzzCheck(m matrix) {
 
 // Create a `p` x `q` matrix of zeros
 func Zero(p, q int) matrix {
-	m := make(matrix, p, p)
+	z := make(matrix, p, p)
 	for i:=0;i<p;i++ {
 		temp := make([]float64, q, q)
-		m[i] = temp
+		z[i] = temp
 	}
-	return m
+	return z
 }
 
-func Transpose(m matrix) matrix {
+// Returns the transpose of matrix `x`
+func Transpose(x matrix) matrix {
 	// Empty matrix
-	if reflect.DeepEqual(m, matrix{}) {
-		return m
+	if reflect.DeepEqual(x, matrix{}) {
+		return x
 	}
 
-	nrow := len(m)
-	ncol := len(m[0])
+	nrow := len(x)
+	ncol := len(x[0])
 
 	m2 := make(matrix, ncol, max(ncol, nrow))
 
-	for _, v1 := range m {
+	for _, v1 := range x {
 		for j, v2 := range v1 {
 			m2[j] = append(m2[j], v2)
 		}
@@ -53,6 +55,7 @@ func Transpose(m matrix) matrix {
 	return m2
 }
 
+// Performs matrix multiplication between matrices `x` and `y`
 func Multiply(x matrix, y matrix) (matrix, error) {
 	// Number of rows in x
 	m := len(x)
@@ -80,3 +83,4 @@ func Multiply(x matrix, y matrix) (matrix, error) {
 
 	return z, nil
 }
+
