@@ -249,6 +249,26 @@ func TestMultiply(t *testing.T) {
 	}
 }
 
+func TestDet(t *testing.T) {
+	type TestCase struct {
+		desc        string
+		input matrix
+		want float64
+	}
+
+	t.Run("fail on invalid multiplication (non-square matrix)", func(t *testing.T) {
+		m := matrix{
+			{1},
+			{2},
+			{3},
+		}
+		_, err := Det(m)
+		if err == nil {
+			t.Errorf("expected inverse to fail")
+		}
+	})	
+}
+
 func TestInverse(t *testing.T) {
 	type TestCase struct {
 		desc        string
