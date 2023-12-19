@@ -361,3 +361,62 @@ func TestInverse(t *testing.T) {
 		})
 	}
 }
+
+func TestAdd(t *testing.T) {
+	type TestCase struct {
+		desc                 string
+		input1, input2, want matrix
+	}
+
+	t.Run("fail on invalid multiplication (pxn * nxq)", func(t *testing.T) {
+		m1 := matrix{
+			{2, 3},
+			{2, 3},
+		}
+		m2 := matrix{
+			{1},
+			{2},
+			{3},
+		}
+		_, err := Add(m1, m2)
+		if err == nil {
+			t.Errorf("expected add to fail")
+		}
+	})
+
+	
+	test_cases := []TestCase{
+		{
+			desc: "Add two matrices together",
+			input1: matrix{
+				{3.2, 3.0, 2.9},
+				{0.3, 1.23, 83.3},
+				{58.2, 12.1, 100},
+			},
+			input2: matrix{
+				{1.2, 0.3, 0.1},
+				{2.0, 1.0, 7.0},
+				{8.3, 48.3, 100},
+			},
+			want: matrix{
+				{4.4, 3.3, 3.0},
+				{2.3, 2.23, 90.3},
+				{66.5, 60.4, 200},
+			},
+		},
+	}
+
+	for _, test_case := range test_cases {
+		t.Run(test_case.desc, func(t *testing.T) {
+			got, err := Add(test_case.input1, test_case.input2)
+
+			if err != nil {
+				t.Errorf("unexpected error %s", err)
+			}
+
+			if !reflect.DeepEqual(got, test_case.want) {
+				t.Errorf("expected to be the same, got %v, want %v", got, test_case.want)
+			}
+		})
+	}
+}
