@@ -85,6 +85,30 @@ func Multiply(x matrix, y matrix) (matrix, error) {
 
 }
 
+
+// Returns matrices `x` and `y` added together
+func Add(x, y matrix) (matrix, error) {
+	// Number of rows/cols in x
+	m := len(x)
+	n := len(x[0])
+	// Numbers of rows/cols in y
+	p := len(y)
+	q := len(y[0])
+
+	if m != p && n != q {
+		return matrix{}, fmt.Errorf("`x` and `y` must be of the same dimension")
+	}
+
+	z := Zero(m,n)
+	
+	for i:=0;i<m;i++ {
+		for j:=0;j<n;j++ {
+			z[i][j] = x[i][j] + y[i][j]
+		}
+	}
+
+	return z, nil
+}
 // returns the determinant of matrix `x`
 func Det(x matrix) (float64, error) {
 	p := len(x)
