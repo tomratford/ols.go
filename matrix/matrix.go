@@ -7,6 +7,16 @@ import (
 
 type matrix = [][]float64
 
+// Create a `p` x `q` matrix of zeros
+func Zero(p, q int) matrix {
+	m := make(matrix, p, p)
+	for i:=0;i<p;i++ {
+		temp := make([]float64, q, q)
+		m[i] = temp
+	}
+	return m
+}
+
 func Transpose(m matrix) matrix {
 	// Empty matrix
 	if reflect.DeepEqual(m, matrix{}) {
