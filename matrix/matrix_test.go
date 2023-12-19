@@ -269,7 +269,7 @@ func TestInverse(t *testing.T) {
 
 	test_cases := []TestCase{
 		{
-			desc: "transpose of the identity is the identity",
+			desc: "inverse of the identity is the identity",
 			input: matrix{
 				{1, 0, 0},
 				{0, 1, 0},
