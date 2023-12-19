@@ -281,6 +281,17 @@ func TestInverse(t *testing.T) {
 				{0, 0, 1},
 			},
 		},
+		{
+			desc: "inverse of a 2x2 matrix",
+			input: matrix{
+				{1, 2},
+				{3, 2},
+			},
+			want: matrix{
+				{-0.5, 0.5},
+				{0.75, -0.25},
+			},
+		},
 	}
 
 	for _, test_case := range test_cases {
