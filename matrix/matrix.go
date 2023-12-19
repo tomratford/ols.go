@@ -84,3 +84,14 @@ func Multiply(x matrix, y matrix) (matrix, error) {
 	return z, nil
 }
 
+// Returns the inverse of matrix `x`
+func Inverse(x matrix) (matrix, error) {
+	p := len(x)
+	q := len(x[0])
+
+	if p != q {
+		return matrix{}, fmt.Errorf("Input must be a square matrix")
+	}
+	
+	return x, nil
+}
