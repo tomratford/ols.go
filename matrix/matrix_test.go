@@ -188,12 +188,48 @@ func TestMultiply(t *testing.T) {
 				{1, 2},
 			},
 			input2: matrix{
-				{1, 2},
-				{0.5, 1.5},
+				{1, -2},
+				{-0.5, 1.5},
 			},
 			want: matrix{
 				{1, 0},
 				{0, 1},
+			},
+		},
+		TestCase{
+			desc: "multiplication by it's own inverse returns the identity (3x3)",
+			input1: matrix{
+				{1, 2, 3},
+				{1, 2, 1},
+				{1, 1, 4},
+			},
+			input2: matrix{
+				{-3.5, 2.5, 2},
+				{1.5, -0.5, -1},
+				{0.5, -0.5, 0},
+			},
+			want: matrix{
+				{1, 0, 0},
+				{0, 1, 0},
+				{0, 0, 1},
+			},
+		},
+		TestCase{
+			desc: "multiplication by it's own inverse returns the identity (fuzz)",
+			input1: matrix{
+				{1, 2, 3},
+				{3, 2, 1},
+				{2, 1, 3},
+			},
+			input2: matrix{
+				{-5.0/12, 0.25, 1.0/3},
+				{7.0/12, 0.25, -2.0/3},
+				{1.0/12, -0.25, 1.0/3},
+			},
+			want: matrix{
+				{1, 0, 0},
+				{0, 1, 0},
+				{0, 0, 1},
 			},
 		},
 	}

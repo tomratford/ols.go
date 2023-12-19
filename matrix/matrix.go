@@ -36,11 +36,28 @@ func Transpose(m matrix) matrix {
 	return m2
 }
 
-func Multiply(m1 matrix, m2 matrix) (matrix, error) {
-	m1_ncol := len(m1[0])
-	m2_nrow := len(m2)
-	if m1_ncol != m2_nrow {
-		return matrix{}, fmt.Errorf("Expected the number of `m1` columns to be the same as the number of `m2` rows")
+func Multiply(x matrix, y matrix) (matrix, error) {
+	// Number of rows in x
+	m := len(x)
+	// Numbers of cols in y
+	p := len(y[0])
+
+	// Number of cols in x/rows in y
+	n := len(x[0])
+	n_check := len(y)
+
+	if n != n_check {
+		return matrix{}, fmt.Errorf("Expected the number of `x` columns to be the same as the number of `y` rows")
 	}
-	return m1, nil
+
+	z := Zero(m, p)
+	for i:=0;i<m;i++ {
+		for j:=0;j<p;j++ {
+			for k:=0;k<n;k++ {
+				z[i][j] += x[i][k] * y[k][j]
+			}
+		}
+	}
+
+	return z, nil
 }
