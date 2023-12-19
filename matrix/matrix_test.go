@@ -248,3 +248,17 @@ func TestMultiply(t *testing.T) {
 		})
 	}
 }
+
+func TestInverse(t *testing.T) {
+	t.Run("fail on invalid multiplication (non-square matrix)", func(t *testing.T) {
+		m := matrix{
+			{1},
+			{2},
+			{3},
+		}
+		_, err := Inverse(m)
+		if err == nil {
+			t.Errorf("expected inverse to fail")
+		}
+	})	
+}
