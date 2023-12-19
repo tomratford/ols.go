@@ -264,7 +264,7 @@ func TestDet(t *testing.T) {
 		}
 		_, err := Det(m)
 		if err == nil {
-			t.Errorf("expected inverse to fail")
+			t.Errorf("expected determinant to fail")
 		}
 	})
 
