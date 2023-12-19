@@ -73,3 +73,21 @@ func TestTranspose(t *testing.T) {
 		})
 	}
 }
+
+func TestMultiply(t *testing.T) {
+	t.Run("fail on invalid multiplication (pxn * nxq)", func(t *testing.T) {
+		m1 := matrix{
+			{2,3},
+			{2,3},
+		}
+		m2 := matrix{
+			{1},
+			{2},
+			{3},
+		}
+		_, err := Multiply(m1, m2)
+		if err == nil {
+			t.Errorf("expected multiply to fail")
+		}
+	})
+}
