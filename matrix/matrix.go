@@ -27,5 +27,10 @@ func Transpose(m matrix) matrix {
 }
 
 func Multiply(m1 matrix, m2 matrix) (matrix, error) {
-	return m1, fmt.Errorf("I'm a bad person")
+	m1_ncol := len(m1[0])
+	m2_nrow := len(m2)
+	if m1_ncol != m2_nrow {
+		return matrix{}, fmt.Errorf("Expected the number of `m1` columns to be the same as the number of `m2` rows")
+	}
+	return m1, nil
 }
