@@ -12,7 +12,7 @@ func TestZero(t *testing.T) {
 		want matrix
 	}
 	test_cases := []TestCase{
-		TestCase{
+		{
 			desc: "2 x 2 zero",
 			p:    2,
 			q:    2,
@@ -21,7 +21,7 @@ func TestZero(t *testing.T) {
 				{0,0},
 			},
 		},
-		TestCase{
+		{
 			desc: "1 x 3 zero",
 			p:    1,
 			q:    3,
@@ -48,7 +48,7 @@ func TestTranspose(t *testing.T) {
 	}
 
 	test_cases := []TestCase{
-		TestCase{
+		{
 			desc: "transpose of the identity is the identity",
 			input: matrix{
 				{1, 0, 0},
@@ -61,7 +61,7 @@ func TestTranspose(t *testing.T) {
 				{0, 0, 1},
 			},
 		},
-		TestCase{
+		{
 			desc: "transpose of a simple 2x2 matrix",
 			input: matrix{
 				{2, 3},
@@ -72,7 +72,7 @@ func TestTranspose(t *testing.T) {
 				{3, 1},
 			},
 		},
-		TestCase{
+		{
 			desc: "transpose of a tall 4x1 matrix",
 			input: matrix{
 				{1.4},
@@ -84,7 +84,7 @@ func TestTranspose(t *testing.T) {
 				{1.4, 3.2, 2.9, 0.3},
 			},
 		},
-		TestCase{
+		{
 			desc: "transpose of a wide two by four matrix",
 			input: matrix{
 				{1.4, 3.2, 2.9, 0.3},
@@ -133,7 +133,7 @@ func TestMultiply(t *testing.T) {
 	})
 
 	test_cases := []TestCase{
-		TestCase{
+		{
 			desc: "multiplication with the identity is the same",
 			input1: matrix{
 				{3.2, 3.0, 2.9},
@@ -151,7 +151,7 @@ func TestMultiply(t *testing.T) {
 				{58.2, 12.1, 100},
 			},
 		},
-		TestCase{
+		{
 			desc: "multiplication of two 2x2 matrix",
 			input1: matrix{
 				{2, 3},
@@ -166,7 +166,7 @@ func TestMultiply(t *testing.T) {
 				{91, 35},
 			},
 		},
-		TestCase{
+		{
 			desc: "multiplication of a wide 1x4 matrix by a tall 4x1 matrix",
 			input1: matrix{
 				{1.4, 2.4, 3.3, 9.1},
@@ -181,7 +181,7 @@ func TestMultiply(t *testing.T) {
 				{21.94},
 			},
 		},
-		TestCase{
+		{
 			desc: "multiplication by it's own inverse returns the identity",
 			input1: matrix{
 				{3, 4},
@@ -196,7 +196,7 @@ func TestMultiply(t *testing.T) {
 				{0, 1},
 			},
 		},
-		TestCase{
+		{
 			desc: "multiplication by it's own inverse returns the identity (3x3)",
 			input1: matrix{
 				{1, 2, 3},
@@ -214,7 +214,7 @@ func TestMultiply(t *testing.T) {
 				{0, 0, 1},
 			},
 		},
-		TestCase{
+		{
 			desc: "multiplication by it's own inverse returns the identity (fuzz)",
 			input1: matrix{
 				{1, 2, 3},
@@ -268,7 +268,7 @@ func TestInverse(t *testing.T) {
 	})
 
 	test_cases := []TestCase{
-		TestCase{
+		{
 			desc: "transpose of the identity is the identity",
 			input: matrix{
 				{1, 0, 0},
