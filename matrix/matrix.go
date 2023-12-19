@@ -3,9 +3,26 @@ package matrix
 import (
 	"fmt"
 	"reflect"
+	"math"
 )
 
 type matrix = [][]float64
+
+var Fuzz = 1.0e-15
+
+// Modifies matrix M in place
+func fuzzCheck(m matrix) {
+	p := len(m)
+	q := len(m[0])
+
+	for i:=0;i<p;i++ {
+		for j:=0;j<q;j++ {
+			if math.Abs(m[i][j]) < Fuzz {
+				m[i][j] = 0.0
+			}
+		}
+	}
+}
 
 // Create a `p` x `q` matrix of zeros
 func Zero(p, q int) matrix {
@@ -58,6 +75,8 @@ func Multiply(x matrix, y matrix) (matrix, error) {
 			}
 		}
 	}
+
+	fuzzCheck(z)
 
 	return z, nil
 }
