@@ -86,7 +86,6 @@ func Multiply(x matrix, y matrix) (matrix, error) {
 
 }
 
-
 // Returns matrices `x` and `y` added together
 func Add(x, y matrix) (matrix, error) {
 	// Number of rows/cols in x
@@ -100,10 +99,10 @@ func Add(x, y matrix) (matrix, error) {
 		return matrix{}, fmt.Errorf("`x` and `y` must be of the same dimension")
 	}
 
-	z := Zero(m,n)
-	
-	for i:=0;i<m;i++ {
-		for j:=0;j<n;j++ {
+	z := Zero(m, n)
+
+	for i := 0; i < m; i++ {
+		for j := 0; j < n; j++ {
 			z[i][j] = x[i][j] + y[i][j]
 		}
 	}
@@ -117,17 +116,16 @@ func Scale(x matrix, a float64) matrix {
 	m := len(x)
 	n := len(x[0])
 
-	z := Zero(m,n)
-	
-	for i:=0;i<m;i++ {
-		for j:=0;j<n;j++ {
+	z := Zero(m, n)
+
+	for i := 0; i < m; i++ {
+		for j := 0; j < n; j++ {
 			z[i][j] = x[i][j] * a
 		}
 	}
 
 	return z
 }
-
 
 // returns the determinant of matrix `x`
 func Det(x matrix) (float64, error) {
@@ -176,7 +174,7 @@ func Inverse(x matrix) (matrix, error) {
 	if det == 0 {
 		return matrix{}, fmt.Errorf("No inverse (determinant = 0)")
 	}
-	
+
 	// some simple cases we can account
 	switch p {
 	case 2:

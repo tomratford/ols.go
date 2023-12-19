@@ -299,7 +299,7 @@ func TestDet(t *testing.T) {
 				t.Errorf("expected to be the same, got %v, want %v", got, test_case.want)
 			}
 		})
-	}	
+	}
 }
 
 func TestInverse(t *testing.T) {
@@ -384,7 +384,6 @@ func TestAdd(t *testing.T) {
 		}
 	})
 
-	
 	test_cases := []TestCase{
 		{
 			desc: "Add two matrices together",
@@ -424,14 +423,14 @@ func TestAdd(t *testing.T) {
 func TestScale(t *testing.T) {
 	t.Run("scale by a factor", func(t *testing.T) {
 		x := matrix{
-			{1,2},
-			{3,4},
+			{1, 2},
+			{3, 4},
 		}
 		a := 0.5
 		got := Scale(x, a)
 		want := matrix{
-			{0.5,1.0},
-			{1.5,2.0},
+			{0.5, 1.0},
+			{1.5, 2.0},
 		}
 		if !reflect.DeepEqual(got, want) {
 			t.Errorf("expected to be the same, got %v, want %v", got, want)
