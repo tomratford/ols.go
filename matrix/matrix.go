@@ -2,8 +2,8 @@ package matrix
 
 import (
 	"fmt"
-	"reflect"
 	"math"
+	"reflect"
 )
 
 type matrix = [][]float64
@@ -16,8 +16,8 @@ func fuzzCheck(x matrix) {
 	p := len(x)
 	q := len(x[0])
 
-	for i:=0;i<p;i++ {
-		for j:=0;j<q;j++ {
+	for i := 0; i < p; i++ {
+		for j := 0; j < q; j++ {
 			if math.Abs(x[i][j]) < Fuzz {
 				x[i][j] = 0.0
 			}
@@ -28,7 +28,7 @@ func fuzzCheck(x matrix) {
 // Create a `p` x `q` matrix of zeros
 func Zero(p, q int) matrix {
 	z := make(matrix, p, p)
-	for i:=0;i<p;i++ {
+	for i := 0; i < p; i++ {
 		temp := make([]float64, q, q)
 		z[i] = temp
 	}
@@ -71,9 +71,9 @@ func Multiply(x matrix, y matrix) (matrix, error) {
 	}
 
 	z := Zero(m, p)
-	for i:=0;i<m;i++ {
-		for j:=0;j<p;j++ {
-			for k:=0;k<n;k++ {
+	for i := 0; i < m; i++ {
+		for j := 0; j < p; j++ {
+			for k := 0; k < n; k++ {
 				z[i][j] += x[i][k] * y[k][j]
 			}
 		}

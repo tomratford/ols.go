@@ -17,8 +17,8 @@ func TestZero(t *testing.T) {
 			p:    2,
 			q:    2,
 			want: matrix{
-				{0,0},
-				{0,0},
+				{0, 0},
+				{0, 0},
 			},
 		},
 		{
@@ -26,14 +26,14 @@ func TestZero(t *testing.T) {
 			p:    1,
 			q:    3,
 			want: matrix{
-				{0,0,0},
+				{0, 0, 0},
 			},
 		},
 	}
 
 	for _, test_case := range test_cases {
 		t.Run(test_case.desc, func(t *testing.T) {
-			got := Zero(test_case.p,test_case.q)
+			got := Zero(test_case.p, test_case.q)
 			if !reflect.DeepEqual(got, test_case.want) {
 				t.Errorf("expected to be equal, got %v, want %v", got, test_case.want)
 			}
@@ -222,9 +222,9 @@ func TestMultiply(t *testing.T) {
 				{2, 1, 3},
 			},
 			input2: matrix{
-				{-5.0/12, 0.25, 1.0/3},
-				{7.0/12, 0.25, -2.0/3},
-				{1.0/12, -0.25, 1.0/3},
+				{-5.0 / 12, 0.25, 1.0 / 3},
+				{7.0 / 12, 0.25, -2.0 / 3},
+				{1.0 / 12, -0.25, 1.0 / 3},
 			},
 			want: matrix{
 				{1, 0, 0},
@@ -251,9 +251,9 @@ func TestMultiply(t *testing.T) {
 
 func TestDet(t *testing.T) {
 	type TestCase struct {
-		desc        string
+		desc  string
 		input matrix
-		want float64
+		want  float64
 	}
 
 	t.Run("fail on invalid multiplication (non-square matrix)", func(t *testing.T) {
@@ -266,7 +266,7 @@ func TestDet(t *testing.T) {
 		if err == nil {
 			t.Errorf("expected inverse to fail")
 		}
-	})	
+	})
 }
 
 func TestInverse(t *testing.T) {
