@@ -6,6 +6,7 @@ import (
 	"reflect"
 )
 
+// A matrix is a packed slices of slices (i.e. not sparse)
 type matrix = [][]float64
 
 // This value is used for comparisons to check for fuzz
@@ -168,7 +169,19 @@ func Inverse(x matrix) (matrix, error) {
 		return matrix{}, fmt.Errorf("Input must be a square matrix")
 	}
 
+	det, err := Det(x)
+	if err != nil {
+		return matrix{}, err
+	}
+	if det == 0 {
+		return matrix{}, fmt.Errorf("No inverse (determinant = 0)")
+	}
+	
 	// some simple cases we can account
+	switch p {
+	case 2:
+		return Scale(matrix{{x[1][1], -x[0][1]}, {-x[1][0], x[0][0]}}, 1/math.Abs(det)), nil
+	}
 
 	return x, nil
 }
