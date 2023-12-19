@@ -109,6 +109,25 @@ func Add(x, y matrix) (matrix, error) {
 
 	return z, nil
 }
+
+// Returns matrix `x` scaled by factor `a`
+func Scale(x matrix, a float64) matrix {
+	// Number of rows/cols in x
+	m := len(x)
+	n := len(x[0])
+
+	z := Zero(m,n)
+	
+	for i:=0;i<m;i++ {
+		for j:=0;j<n;j++ {
+			z[i][j] = x[i][j] * a
+		}
+	}
+
+	return z
+}
+
+
 // returns the determinant of matrix `x`
 func Det(x matrix) (float64, error) {
 	p := len(x)
