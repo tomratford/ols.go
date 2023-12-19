@@ -267,6 +267,39 @@ func TestDet(t *testing.T) {
 			t.Errorf("expected inverse to fail")
 		}
 	})
+
+	test_cases := []TestCase{
+		{
+			desc: "determinant of a 2x2 matrix",
+			input: matrix{
+				{1, 2},
+				{3, 2},
+			},
+			want: -4,
+		},
+		{
+			desc: "determinant of a 3x3 matrix",
+			input: matrix{
+				{1, 2, 3},
+				{3, 2, 1},
+				{2, 1, 3},
+			},
+			want: -12,
+		},
+	}
+	for _, test_case := range test_cases {
+		t.Run(test_case.desc, func(t *testing.T) {
+			got, err := Det(test_case.input)
+
+			if err != nil {
+				t.Errorf("unexpected error %s", err)
+			}
+
+			if !reflect.DeepEqual(got, test_case.want) {
+				t.Errorf("expected to be the same, got %v, want %v", got, test_case.want)
+			}
+		})
+	}	
 }
 
 func TestInverse(t *testing.T) {
