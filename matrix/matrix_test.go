@@ -75,6 +75,11 @@ func TestTranspose(t *testing.T) {
 }
 
 func TestMultiply(t *testing.T) {
+	type TestCase struct {
+		desc string
+		input1, input2, want matrix
+	}
+
 	t.Run("fail on invalid multiplication (pxn * nxq)", func(t *testing.T) {
 		m1 := matrix{
 			{2,3},
@@ -90,4 +95,84 @@ func TestMultiply(t *testing.T) {
 			t.Errorf("expected multiply to fail")
 		}
 	})
+
+	test_cases := []TestCase{
+		TestCase{
+			desc: "multiplication with the identity is the same",
+			input1: matrix{
+				{3.2,3.0,2.9},
+				{0.3,1.23,83.3},
+				{58.2,12.1,100},
+			},
+			input2: matrix{
+				{1,0,0},
+				{0,1,0},
+				{0,0,1},
+			},
+			want: matrix{
+				{3.2,3.0,2.9},
+				{0.3,1.23,83.3},
+				{58.2,12.1,100},
+			},
+		},
+		TestCase{
+			desc: "multiplication of two 2x2 matrix",
+			input1: matrix{
+				{2,3},
+				{8,1},
+			},
+			input2: matrix{
+				{10,4},
+				{11,3},
+			},
+			want: matrix{
+				{53,17},
+				{91,35},
+			},
+		},
+		TestCase{
+			desc: "multiplication of a wide 1x4 matrix by a tall 4x1 matrix",
+			input1: matrix{
+				{1.4, 2.4, 3.3, 9.1},
+			},			
+			input2: matrix{
+				{1.4},
+				{3.2},
+				{2.9},
+				{0.3},
+			},
+			want: matrix{
+				{21.94},
+			},
+		},
+		TestCase{
+			desc: "multiplication by it's own inverse returns the identity",
+			input1: matrix{
+				{3,4},
+				{1,2},
+			},
+			input2: matrix{
+				{1,2},
+				{0.5,1.5},
+			},
+			want: matrix{
+				{1,0},
+				{0,1},
+			},
+		},
+	}
+
+	for _, test_case := range test_cases {
+		t.Run(test_case.desc, func(t *testing.T) {
+			got, err := Multiply(test_case.input1, test_case.input2)
+
+			if err != nil {
+				t.Errorf("unexpected error %s", err)
+			}
+			
+			if !reflect.DeepEqual(got, test_case.want) {
+				t.Errorf("expected to be the same, got %v, want %v", got, test_case.want)
+			}
+		})
+	}
 }
