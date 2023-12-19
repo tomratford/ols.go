@@ -82,8 +82,10 @@ func Multiply(x matrix, y matrix) (matrix, error) {
 	fuzzCheck(z)
 
 	return z, nil
+
 }
 
+// returns the determinant of matrix `x`
 func Det(x matrix) (float64, error) {
 	p := len(x)
 	q := len(x[0])
@@ -91,6 +93,25 @@ func Det(x matrix) (float64, error) {
 	if p != q {
 		return 0.0, fmt.Errorf("Input must be a square matrix")
 	}
+
+	// some simple cases we can account for easily
+	switch p {
+	case 2:
+		return x[0][0]*x[1][1] - x[1][0]*x[1][1], nil
+	case 3:
+		aei := x[0][0] * x[1][1] * x[2][2]
+		bfg := x[0][1] * x[1][2] * x[2][0]
+		cdh := x[0][2] * x[1][0] * x[2][1]
+
+		ceg := x[0][2] * x[1][1] * x[2][0]
+		bdi := x[0][1] * x[1][0] * x[2][2]
+		afh := x[0][0] * x[1][2] * x[2][1]
+
+		return aei + bfg + cdh - ceg - bdi - afh, nil
+	}
+
+	// We are going to try to implement this in the following way:
+	// LU decomposition, this is probably worthy of a new file at this point
 
 	return 1, nil
 }
@@ -103,6 +124,8 @@ func Inverse(x matrix) (matrix, error) {
 	if p != q {
 		return matrix{}, fmt.Errorf("Input must be a square matrix")
 	}
+
+	// some simple cases we can account
 
 	return x, nil
 }
