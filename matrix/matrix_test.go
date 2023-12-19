@@ -250,6 +250,11 @@ func TestMultiply(t *testing.T) {
 }
 
 func TestInverse(t *testing.T) {
+	type TestCase struct {
+		desc        string
+		input, want matrix
+	}
+
 	t.Run("fail on invalid multiplication (non-square matrix)", func(t *testing.T) {
 		m := matrix{
 			{1},
@@ -260,5 +265,35 @@ func TestInverse(t *testing.T) {
 		if err == nil {
 			t.Errorf("expected inverse to fail")
 		}
-	})	
+	})
+
+	test_cases := []TestCase{
+		TestCase{
+			desc: "transpose of the identity is the identity",
+			input: matrix{
+				{1, 0, 0},
+				{0, 1, 0},
+				{0, 0, 1},
+			},
+			want: matrix{
+				{1, 0, 0},
+				{0, 1, 0},
+				{0, 0, 1},
+			},
+		},
+	}
+
+	for _, test_case := range test_cases {
+		t.Run(test_case.desc, func(t *testing.T) {
+			got, err := Inverse(test_case.input)
+
+			if err != nil {
+				t.Errorf("unexpected error %s", err)
+			}
+
+			if !reflect.DeepEqual(got, test_case.want) {
+				t.Errorf("expected to be the same, got %v, want %v", got, test_case.want)
+			}
+		})
+	}
 }
