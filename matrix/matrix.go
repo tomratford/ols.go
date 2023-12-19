@@ -1,6 +1,9 @@
 package matrix
 
-import "reflect"
+import (
+	"fmt"
+	"reflect"
+)
 
 type matrix = [][]float64
 
@@ -21,4 +24,8 @@ func Transpose(m matrix) matrix {
 		}
 	}
 	return m2
+}
+
+func Multiply(m1 matrix, m2 matrix) (matrix, error) {
+	return m1, fmt.Errorf("I'm a bad person")
 }
