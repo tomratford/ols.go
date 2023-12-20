@@ -368,7 +368,7 @@ func TestAdd(t *testing.T) {
 		input1, input2, want matrix
 	}
 
-	t.Run("fail on invalid multiplication (pxn * nxq)", func(t *testing.T) {
+	t.Run("fail on invalid addition (pxq + nxm)", func(t *testing.T) {
 		m1 := matrix{
 			{2, 3},
 			{2, 3},
