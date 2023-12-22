@@ -32,18 +32,25 @@ func (x *matrix) Index(i,j int) float64 {
 	return x.Values[[2]int{i,j}]
 }
 
+// Set a matrix value at a point
+func (x *matrix) Set(i,j int, v float64) {
+	x.Values[[2]int{i,j}] = v
+}
+
+// Add to a value at a point
+func (x *matrix) Update(i,j int, v float64) {
+	x.Values[[2]int{i,j}] += v
+}
+
 // This value is used for comparisons to check for fuzz
 var Fuzz = 1.0e-15
 
 // WARN: modifies matrix `x` in place
 func fuzzCheck(x matrix) {
-	p := len(x)
-	q := len(x[0])
-
-	for i := 0; i < p; i++ {
-		for j := 0; j < q; j++ {
-			if math.Abs(x[i][j]) < Fuzz {
-				x[i][j] = 0.0
+	for i := 0; i < x.N; i++ {
+		for j := 0; j < x.M; j++ {
+			if math.Abs(x.Index(i,j)) < Fuzz {
+				x.Set(i,j,0)
 			}
 		}
 	}
