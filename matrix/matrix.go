@@ -12,8 +12,24 @@ import (
  element and `Values[{N,M}]` is the bottome rightmost element.
 */
 type matrix struct {
-	Values map[[2]uint]float64
+	Values map[[2]int]float64
 	N, M int
+}
+
+// Returns a new blank matrix
+func NewMatrix(n, m int) matrix {
+	values := make(map[[2]int]float64, n*m) // Allocate the maximum possible memory
+
+	return matrix{
+		Values: values,
+		N: n,
+		M: m,
+	}
+}
+
+// Index a matrix at a point
+func (x *matrix) Index(i,j int) float64 {
+	return x.Values[[2]int{i,j}]
 }
 
 // This value is used for comparisons to check for fuzz
