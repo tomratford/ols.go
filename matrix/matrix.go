@@ -6,8 +6,15 @@ import (
 	"reflect"
 )
 
-// A matrix is a packed slices of slices (i.e. not sparse)
-type matrix = [][]float64
+/*
+ A sparse matrix contains a map of values, indexed by a 2-dim array representing
+ the coordinates of the matrix. Where `Values[{0,0}]` is the top leftmost
+ element and `Values[{N,M}]` is the bottome rightmost element.
+*/
+type matrix struct {
+	Values map[[2]uint]float64
+	N, M int
+}
 
 // This value is used for comparisons to check for fuzz
 var Fuzz = 1.0e-15
