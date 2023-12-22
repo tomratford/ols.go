@@ -16,8 +16,8 @@ type matrix struct {
 	N, M int
 }
 
-// Returns a new blank matrix
-func NewMatrix(n, m int) matrix {
+// Create a `n` x `m` matrix of zeros
+func Zero(n, m int) matrix {
 	values := make(map[[2]int]float64, n*m) // Allocate the maximum possible memory
 
 	return matrix{
@@ -47,16 +47,6 @@ func fuzzCheck(x matrix) {
 			}
 		}
 	}
-}
-
-// Create a `p` x `q` matrix of zeros
-func Zero(p, q int) matrix {
-	z := make(matrix, p, p)
-	for i := 0; i < p; i++ {
-		temp := make([]float64, q, q)
-		z[i] = temp
-	}
-	return z
 }
 
 // Returns the transpose of matrix `x`
