@@ -36,3 +36,20 @@ func ScaleRow(x matrix, row int, scale float64) (matrix, error) {
 
 	return Multiply(z,x)
 }
+
+// Add a multiple of one row to the other
+func AddToRow(x matrix, row1, row2 int, scale float64) (matrix, error) {
+	if row1 > x.N {
+		return matrix{}, fmt.Errorf("row1 out of range. %d > %d", row1, x.N)
+	}
+	if row2 > x.N {
+		return matrix{}, fmt.Errorf("row2 out of range. %d > %d", row2, x.N)
+	}
+
+	// Implemented via matrix multiplication - less efficient but should be OK
+	z := Identity(x.N)
+
+	z.Set(row1,row2,scale)
+
+	return Multiply(z,x)
+}
