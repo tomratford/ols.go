@@ -2,6 +2,7 @@ package matrix
 
 import (
 	"fmt"
+	"maps"
 	"math"
 	"reflect"
 )
@@ -13,6 +14,7 @@ import (
 */
 type matrix struct {
 	Values map[[2]int]float64
+	// Number of Rows and Columns
 	N, M int
 }
 
@@ -27,29 +29,74 @@ func Zero(n, m int) matrix {
 	}
 }
 
-// Index a matrix at a point
-func (x *matrix) Index(i,j int) float64 {
+// Get the value in a matrix at a point
+func (x *matrix) Get(i,j int) float64 {
 	return x.Values[[2]int{i,j}]
 }
 
 // Set a matrix value at a point
-func (x *matrix) Set(i,j int, v float64) {
+func (x *matrix) Set(i,j int, v float64) error {
+	if i > x.N || j > x.M || i < 0 || j < 0 {
+		return fmt.Errorf("Invalid address")
+	}
+	if v == 0 {
+		delete(x.Values,[2]int{i,j})
+	}
 	x.Values[[2]int{i,j}] = v
+	return nil
 }
 
 // Add to a value at a point
-func (x *matrix) Update(i,j int, v float64) {
+func (x *matrix) Update(i,j int, v float64) error {
+	if i > x.N || j > x.M || i < 0 || j < 0 {
+		return fmt.Errorf("Invalid address")
+	}
 	x.Values[[2]int{i,j}] += v
+	return nil
+}
+
+// Copy a matrix in it's entirety
+func (x *matrix) Copy() matrix {
+	return matrix{
+		Values: maps.Clone(x.Values), // OK to use as we are a shallow map
+		N: x.N,
+		M: x.M,
+	}
+}
+
+// Check is two matrices are equal
+func Equal(x, y matrix) bool {
+	if !(x.N == y.N && x.M == y.M) {
+		return false
+	}
+
+	// number of non-zero elements
+	if len(x.Values) != len(y.Values) {
+		return false
+	}
+
+	for xk, xv := range x.Values {
+		yv, ok := y.Values[xk]
+		if !ok { // Does y have the same elements as x?
+			return false
+		}
+
+		if diff := math.Abs(xv - yv); diff > Fuzz {
+			fmt.Println(diff)
+			return false
+		}
+	}
+	return true
 }
 
 // This value is used for comparisons to check for fuzz
-var Fuzz = 1.0e-15
+var Fuzz = 1.0e-14
 
 // WARN: modifies matrix `x` in place
 func fuzzCheck(x matrix) {
 	for i := 0; i < x.N; i++ {
 		for j := 0; j < x.M; j++ {
-			if math.Abs(x.Index(i,j)) < Fuzz {
+			if math.Abs(x.Get(i,j)) < Fuzz {
 				x.Set(i,j,0)
 			}
 		}
@@ -63,39 +110,26 @@ func Transpose(x matrix) matrix {
 		return x
 	}
 
-	nrow := len(x)
-	ncol := len(x[0])
+	z := Zero(x.M, x.N)
 
-	m2 := make(matrix, ncol, max(ncol, nrow))
-
-	for _, v1 := range x {
-		for j, v2 := range v1 {
-			m2[j] = append(m2[j], v2)
-		}
+	for k, v := range x.Values {
+		z.Set(k[1],k[0],v)
 	}
-	return m2
+
+	return z
 }
 
 // Performs matrix multiplication between matrices `x` and `y`
 func Multiply(x matrix, y matrix) (matrix, error) {
-	// Number of rows in x
-	m := len(x)
-	// Numbers of cols in y
-	p := len(y[0])
-
-	// Number of cols in x/rows in y
-	n := len(x[0])
-	n_check := len(y)
-
-	if n != n_check {
+	if x.M != y.N {
 		return matrix{}, fmt.Errorf("Expected the number of `x` columns to be the same as the number of `y` rows")
 	}
 
-	z := Zero(m, p)
-	for i := 0; i < m; i++ {
-		for j := 0; j < p; j++ {
-			for k := 0; k < n; k++ {
-				z[i][j] += x[i][k] * y[k][j]
+	z := Zero(x.N, y.M)
+	for i := 0; i < x.N; i++ {
+		for j := 0; j < y.M; j++ {
+			for k := 0; k < x.M; k++ {
+				z.Update(i,j, x.Get(i,k) * y.Get(k,j))
 			}
 		}
 	}
@@ -108,22 +142,15 @@ func Multiply(x matrix, y matrix) (matrix, error) {
 
 // Returns matrices `x` and `y` added together
 func Add(x, y matrix) (matrix, error) {
-	// Number of rows/cols in x
-	m := len(x)
-	n := len(x[0])
-	// Numbers of rows/cols in y
-	p := len(y)
-	q := len(y[0])
-
-	if m != p && n != q {
+	if x.N != y.N && x.M != y.M {
 		return matrix{}, fmt.Errorf("`x` and `y` must be of the same dimension")
 	}
 
-	z := Zero(m, n)
+	z := Zero(x.N, x.M)
 
-	for i := 0; i < m; i++ {
-		for j := 0; j < n; j++ {
-			z[i][j] = x[i][j] + y[i][j]
+	for i := 0; i < x.N; i++ {
+		for j := 0; j < x.M; j++ {
+			z.Set(i,j, x.Get(i,j) + y.Get(i,j))
 		}
 	}
 
@@ -132,15 +159,11 @@ func Add(x, y matrix) (matrix, error) {
 
 // Returns matrix `x` scaled by factor `a`
 func Scale(x matrix, a float64) matrix {
-	// Number of rows/cols in x
-	m := len(x)
-	n := len(x[0])
+	z := Zero(x.N, x.M)
 
-	z := Zero(m, n)
-
-	for i := 0; i < m; i++ {
-		for j := 0; j < n; j++ {
-			z[i][j] = x[i][j] * a
+	for i := 0; i < x.N; i++ {
+		for j := 0; j < x.M; j++ {
+			z.Set(i,j, x.Get(i,j) * a)
 		}
 	}
 
@@ -149,25 +172,22 @@ func Scale(x matrix, a float64) matrix {
 
 // returns the determinant of matrix `x`
 func Det(x matrix) (float64, error) {
-	p := len(x)
-	q := len(x[0])
-
-	if p != q {
+	if x.N != x.M {
 		return 0.0, fmt.Errorf("Input must be a square matrix")
 	}
 
 	// some simple cases we can account for easily
-	switch p {
+	switch x.N {
 	case 2:
-		return x[0][0]*x[1][1] - x[1][0]*x[1][1], nil
+		return x.Get(0,0)*x.Get(1,1) - x.Get(1,0)*x.Get(1,1), nil
 	case 3:
-		aei := x[0][0] * x[1][1] * x[2][2]
-		bfg := x[0][1] * x[1][2] * x[2][0]
-		cdh := x[0][2] * x[1][0] * x[2][1]
+		aei := x.Get(0,0) * x.Get(1,1) * x.Get(2,2)
+		bfg := x.Get(0,1) * x.Get(1,2) * x.Get(2,0)
+		cdh := x.Get(0,2) * x.Get(1,0) * x.Get(2,1)
 
-		ceg := x[0][2] * x[1][1] * x[2][0]
-		bdi := x[0][1] * x[1][0] * x[2][2]
-		afh := x[0][0] * x[1][2] * x[2][1]
+		ceg := x.Get(0,2) * x.Get(1,1) * x.Get(2,0)
+		bdi := x.Get(0,1) * x.Get(1,0) * x.Get(2,2)
+		afh := x.Get(0,0) * x.Get(1,2) * x.Get(2,1)
 
 		return aei + bfg + cdh - ceg - bdi - afh, nil
 	}
@@ -180,10 +200,7 @@ func Det(x matrix) (float64, error) {
 
 // Returns the inverse of matrix `x`
 func Inverse(x matrix) (matrix, error) {
-	p := len(x)
-	q := len(x[0])
-
-	if p != q {
+	if x.N != x.M {
 		return matrix{}, fmt.Errorf("Input must be a square matrix")
 	}
 
@@ -196,9 +213,14 @@ func Inverse(x matrix) (matrix, error) {
 	}
 
 	// some simple cases we can account
-	switch p {
+	switch x.M {
 	case 2:
-		return Scale(matrix{{x[1][1], -x[0][1]}, {-x[1][0], x[0][0]}}, 1/math.Abs(det)), nil
+		z := Zero(x.N, x.M)
+		z.Set(0,0,x.Get(1,1))
+		z.Set(0,1,-x.Get(0,1))
+		z.Set(1,0,-x.Get(1,0))
+		z.Set(1,1,x.Get(0,0))
+		return Scale(z, 1/math.Abs(det)), nil
 	}
 
 	return x, nil
