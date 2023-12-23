@@ -1,11 +1,9 @@
 package matrix
 
-import "fmt"
-
 func IsDiagonal(x matrix) (bool, error) {
-	if x.N != x.M {
-		return false, fmt.Errorf("Expected a square matrix, got a %d x %d", x.N, x.M)
-	}
+	if b, err := x.isSquare(); !b {
+		return false, err
+	}	
 
 	for i:=0;i<x.N;i++ {
 		for j:=0;j<x.M;j++ {
@@ -22,9 +20,9 @@ func IsDiagonal(x matrix) (bool, error) {
 }
 
 func IsUpperTriangular(x matrix) (bool, error) {
-	if x.N != x.M {
-		return false, fmt.Errorf("Expected a square matrix, got a %d x %d", x.N, x.M)
-	}
+	if b, err := x.isSquare(); !b {
+		return false, err
+	}	
 
 	for i:=0;i<x.N;i++ {
 		for j:=0;j<x.M;j++ {

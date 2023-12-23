@@ -29,6 +29,15 @@ func Zero(n, m int) matrix {
 	}
 }
 
+// Helper for consistent error messaging
+func (x *matrix) isSquare() (bool, error) {
+	if x.N == x.M {
+		return true, nil
+	} else {
+		return false, fmt.Errorf("Expected a square matrix, got a %d x %d", x.N, x.M)
+	} 
+}
+
 // Get the value in a matrix at a point
 func (x *matrix) Get(i,j int) float64 {
 	return x.Values[[2]int{i,j}]
@@ -175,8 +184,8 @@ func Scale(x matrix, a float64) matrix {
 
 // returns the determinant of matrix `x`
 func Det(x matrix) (float64, error) {
-	if x.N != x.M {
-		return 0.0, fmt.Errorf("Input must be a square matrix")
+	if b, err := x.isSquare(); !b {
+		return 0.0, err
 	}
 
 	// some simple cases we can account for easily
@@ -203,9 +212,9 @@ func Det(x matrix) (float64, error) {
 
 // Returns the inverse of matrix `x`
 func Inverse(x matrix) (matrix, error) {
-	if x.N != x.M {
-		return matrix{}, fmt.Errorf("Input must be a square matrix")
-	}
+	if b, err := x.isSquare(); !b {
+		return matrix{}, err
+	}	
 
 	det, err := Det(x)
 	if err != nil {
