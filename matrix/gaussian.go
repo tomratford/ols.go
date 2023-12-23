@@ -9,8 +9,8 @@ func SwapRows(x matrix, row1, row2 int) (matrix, error) {
 	}
 	if row2 > x.N {
 		return matrix{}, fmt.Errorf("row2 out of range. %d > %d", row2, x.N)
-	}	
-	
+	}
+
 	// Implemented via matrix multiplication - less efficient but should be OK
 	z := Identity(x.N)
 
@@ -19,6 +19,20 @@ func SwapRows(x matrix, row1, row2 int) (matrix, error) {
 
 	z.Set(row1,row2,1)
 	z.Set(row2,row1,1)
+
+	return Multiply(z,x)
+}
+
+// Swap two rows
+func ScaleRow(x matrix, row int, scale float64) (matrix, error) {
+	if row > x.N {
+		return matrix{}, fmt.Errorf("row1 out of range. %d > %d", row, x.N)
+	}
+
+	// Implemented via matrix multiplication - less efficient but should be OK
+	z := Identity(x.N)
+
+	z.Set(row,row,scale)
 
 	return Multiply(z,x)
 }
