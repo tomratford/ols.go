@@ -130,3 +130,40 @@ func TestAddToRow(t *testing.T) {
 		})
 	}
 }
+
+func TestGuassianElimination(t *testing.T) {
+	type TestCase struct {
+		desc string
+		input, want matrix
+	}
+
+	test_cases := []TestCase{
+		{
+			desc: "Gaussian elimination in a 3x3 matrix",
+			input: fromSliceOfSlices([][]float64{
+				{2, 1, -1},
+				{-3, -1, 2},
+				{-2, 1, 2},
+			}),
+			want: fromSliceOfSlices([][]float64{
+				{2, 1, -1},
+				{0, 0.5, 0.5},
+				{0, 0, -1},
+			}),
+		},
+	}
+
+	for _, test_case := range test_cases {
+		t.Run(test_case.desc, func(t *testing.T) {
+			got,_, err := GaussianElimination(test_case.input)
+
+			if err != nil {
+				t.Errorf("unexpected error: %s", err)
+			}
+
+			if !Equal(got, test_case.want) {
+				t.Errorf("expected to be the same, got %v, want %v", got, test_case.want)
+			}
+		})
+	}
+}
