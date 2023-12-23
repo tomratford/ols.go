@@ -151,6 +151,19 @@ func TestGuassianElimination(t *testing.T) {
 				{0, 0, -1},
 			}),
 		},
+		{
+			desc: "Gaussian elimination in a 3x4 matrix",
+			input: fromSliceOfSlices([][]float64{
+				{1,3,1,9},
+				{1,1,-1,1},
+				{3,11,5,35},
+			}),
+			want: fromSliceOfSlices([][]float64{
+				{1, 3, 1, 9},
+				{0, -2, -2, -8},
+				{0, 0, 0, 0},
+			}),
+		},
 	}
 
 	for _, test_case := range test_cases {

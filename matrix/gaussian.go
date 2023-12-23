@@ -73,7 +73,7 @@ func GaussianElimination(x matrix) (matrix, matrix, error) {
 		if i >= x.N {
 			return z, p, nil
 		}
-		if i > x.M {
+		if j >= x.M {
 			return z, p, nil
 		}
 
@@ -81,8 +81,8 @@ func GaussianElimination(x matrix) (matrix, matrix, error) {
 		if z.Get(i,j) == 0 {
 			for k:=i;k<=x.N;k++ {
 				if k == x.N {
-					j += 1 // All zero, move to next column
-					break
+					j += 1 // Overflowerd rows, meaning all zero, move to next column
+					break // Kick us to the continue
 				}
 				if z.Get(k,j) != 0 {
 					var err error
