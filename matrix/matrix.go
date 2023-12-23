@@ -51,6 +51,9 @@ func (x *matrix) Update(i,j int, v float64) error {
 	if i > x.N || j > x.M || i < 0 || j < 0 {
 		return fmt.Errorf("Invalid address")
 	}
+	if v == 0 {
+		return nil // Don't want this to make new empty elements
+	}
 	x.Values[[2]int{i,j}] += v
 	return nil
 }
