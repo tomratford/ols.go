@@ -3,19 +3,16 @@ package matrix
 import "fmt"
 
 func IsDiagonal(x matrix) (bool, error) {
-	p := len(x)
-	q := len(x[0])
-
-	if p != q {
-		return false, fmt.Errorf("Expected a square matrix, got a %d x %d", p, q)
+	if x.N != x.M {
+		return false, fmt.Errorf("Expected a square matrix, got a %d x %d", x.N, x.M)
 	}
 
-	for i:=0;i<p;i++ {
-		for j:=0;j<q;j++ {
+	for i:=0;i<x.N;i++ {
+		for j:=0;j<x.M;j++ {
 			if i == j { // Skip on diagonal entries
 				continue
 			}
-			if x[i][j] != 0 {
+			if x.Get(i,j) != 0 {
 				return false, nil
 			}
 		}
@@ -25,17 +22,14 @@ func IsDiagonal(x matrix) (bool, error) {
 }
 
 func IsUpperTriangular(x matrix) (bool, error) {
-	p := len(x)
-	q := len(x[0])
-
-	if p != q {
-		return false, fmt.Errorf("Expected a square matrix, got a %d x %d", p, q)
+	if x.N != x.M {
+		return false, fmt.Errorf("Expected a square matrix, got a %d x %d", x.N, x.M)
 	}
 
-	for i:=0;i<p;i++ {
-		for j:=0;j<q;j++ {
+	for i:=0;i<x.N;i++ {
+		for j:=0;j<x.M;j++ {
 			if i > j {
-				if x[i][j] != 0 {
+				if x.Get(i,j) != 0 {
 					return false, nil
 				}
 			}
