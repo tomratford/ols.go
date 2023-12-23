@@ -29,6 +29,15 @@ func Zero(n, m int) matrix {
 	}
 }
 
+// Returns the `n` x `n` identity matrix
+func Identity(n int) matrix {
+	z := Zero(n,n)
+	for i:=0;i<n;i++ {
+		z.Set(i,i,1)
+	}
+	return z
+}
+
 // Helper for consistent error messaging
 func (x *matrix) isSquare() (bool, error) {
 	if x.N == x.M {
