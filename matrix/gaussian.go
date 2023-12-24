@@ -54,7 +54,7 @@ func AddToRow(x matrix, row1, row2 int, scale float64) (matrix, error) {
 	return Multiply(z,x)
 }
 
-// Return a matrix in echelon form
+// Return a matrix in echelon form alongside a permutation matrix
 func GaussianElimination(x matrix) (matrix, matrix, error) {
 	z := x.Copy()
 	p := Identity(x.N) // Permutation matrix
