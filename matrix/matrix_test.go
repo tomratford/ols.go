@@ -339,6 +339,19 @@ func TestInverse(t *testing.T) {
 				{-0.75, 0.25},
 			}),
 		},
+		{
+			desc: "inverse of a 3x3 matrix",
+			input: fromSliceOfSlices([][]float64{
+				{1, 2, 3},
+				{1, 2, 1},
+				{1, 1, 4},
+			}),
+			want: fromSliceOfSlices([][]float64{
+				{-3.5, 2.5, 2},
+				{1.5, -0.5, -1},
+				{0.5, -0.5, 0},
+			}),
+		},
 	}
 
 	for _, test_case := range test_cases {
