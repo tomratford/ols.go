@@ -14,22 +14,24 @@ func fromSliceOfSlices(x [][]float64) matrix {
 
 	for i := 0; i < p; i++ {
 		for j := 0; j < q; j++ {
-			z.Set(i,j,x[i][j])
+			z.Set(i, j, x[i][j])
 		}
 	}
+
+	z.fuzzCheck() // Remove 0 values for good equals
 	return z
 }
 
 func TestUpdate(t *testing.T) {
 	t.Run("what if we update an empty element?", func(t *testing.T) {
-		z := Zero(4,4)
-		z.Update(1,1,3) // Does this element become 3?
-		z.Update(0,0,0) // Does this stay an empty element?
+		z := Zero(4, 4)
+		z.Update(1, 1, 3) // Does this element become 3?
+		z.Update(0, 0, 0) // Does this stay an empty element?
 
-		if z.Get(1,1) != 3 {
+		if z.Get(1, 1) != 3 {
 			t.Errorf("does not work on empties")
 		}
-		if _, got := z.Values[[2]int{0,0}]; got {
+		if _, got := z.Values[[2]int{0, 0}]; got {
 			t.Errorf("makes an empty value have a value")
 		}
 	})

@@ -34,9 +34,9 @@ func TestIsDiagonal(t *testing.T) {
 
 	t.Run("Fails on non-diagonal matrices", func(t *testing.T) {
 		m := fromSliceOfSlices([][]float64{
-			{3,4,8},
-			{0,8,3},
-			{1,3,7},
+			{3, 4, 8},
+			{0, 8, 3},
+			{1, 3, 7},
 		})
 		got, err := IsDiagonal(m)
 		if err != nil {
@@ -78,9 +78,9 @@ func TestIsUpperTriangular(t *testing.T) {
 
 	t.Run("Fails on non upper triangular matrices", func(t *testing.T) {
 		m := fromSliceOfSlices([][]float64{
-			{3,4,8},
-			{0,8,3},
-			{1,3,7},
+			{3, 4, 8},
+			{0, 8, 3},
+			{1, 3, 7},
 		})
 		got, err := IsUpperTriangular(m)
 		if err != nil {

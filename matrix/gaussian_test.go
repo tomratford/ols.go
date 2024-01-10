@@ -4,9 +4,9 @@ import "testing"
 
 func TestSwapRow(t *testing.T) {
 	type TestCase struct {
-		desc string
+		desc        string
 		input, want matrix
-		row1, row2 int
+		row1, row2  int
 	}
 
 	test_cases := []TestCase{
@@ -46,13 +46,13 @@ func TestSwapRow(t *testing.T) {
 
 func TestScaleRow(t *testing.T) {
 	type TestCase struct {
-		desc string
+		desc        string
 		input, want matrix
-		row int
-		scale float64
+		row         int
+		scale       float64
 	}
 
-		test_cases := []TestCase{
+	test_cases := []TestCase{
 		{
 			desc: "Swap rows in a matrix",
 			input: fromSliceOfSlices([][]float64{
@@ -61,7 +61,7 @@ func TestScaleRow(t *testing.T) {
 				{2.9, 9.3},
 				{0.3, 3.8},
 			}),
-			row: 0,
+			row:   0,
 			scale: 2,
 			want: fromSliceOfSlices([][]float64{
 				{2.8, 8.8},
@@ -89,10 +89,10 @@ func TestScaleRow(t *testing.T) {
 
 func TestAddToRow(t *testing.T) {
 	type TestCase struct {
-		desc string
+		desc        string
 		input, want matrix
-		row1, row2 int
-		scale float64
+		row1, row2  int
+		scale       float64
 	}
 
 	test_cases := []TestCase{
@@ -104,8 +104,8 @@ func TestAddToRow(t *testing.T) {
 				{2.9, 9.3},
 				{0.3, 3.8},
 			}),
-			row1: 2,
-			row2: 0,
+			row1:  2,
+			row2:  0,
 			scale: -2,
 			want: fromSliceOfSlices([][]float64{
 				{1.4, 4.4},
@@ -133,7 +133,7 @@ func TestAddToRow(t *testing.T) {
 
 func TestGuassianElimination(t *testing.T) {
 	type TestCase struct {
-		desc string
+		desc        string
 		input, want matrix
 	}
 
@@ -154,9 +154,9 @@ func TestGuassianElimination(t *testing.T) {
 		{
 			desc: "Gaussian elimination in a 3x4 matrix",
 			input: fromSliceOfSlices([][]float64{
-				{1,3,1,9},
-				{1,1,-1,1},
-				{3,11,5,35},
+				{1, 3, 1, 9},
+				{1, 1, -1, 1},
+				{3, 11, 5, 35},
 			}),
 			want: fromSliceOfSlices([][]float64{
 				{1, 3, 1, 9},
@@ -168,7 +168,7 @@ func TestGuassianElimination(t *testing.T) {
 
 	for _, test_case := range test_cases {
 		t.Run(test_case.desc, func(t *testing.T) {
-			got,_, err := GaussianElimination(test_case.input)
+			got, _, err := GaussianElimination(test_case.input)
 
 			if err != nil {
 				t.Errorf("unexpected error: %s", err)
