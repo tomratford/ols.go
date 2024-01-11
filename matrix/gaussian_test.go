@@ -5,7 +5,7 @@ import "testing"
 func TestSwapRow(t *testing.T) {
 	type TestCase struct {
 		desc        string
-		input, want matrix
+		input, want Matrix
 		row1, row2  int
 	}
 
@@ -47,7 +47,7 @@ func TestSwapRow(t *testing.T) {
 func TestScaleRow(t *testing.T) {
 	type TestCase struct {
 		desc        string
-		input, want matrix
+		input, want Matrix
 		row         int
 		scale       float64
 	}
@@ -90,7 +90,7 @@ func TestScaleRow(t *testing.T) {
 func TestAddToRow(t *testing.T) {
 	type TestCase struct {
 		desc        string
-		input, want matrix
+		input, want Matrix
 		row1, row2  int
 		scale       float64
 	}
@@ -134,7 +134,7 @@ func TestAddToRow(t *testing.T) {
 func TestGuassianElimination(t *testing.T) {
 	type TestCase struct {
 		desc        string
-		input, want matrix
+		input, want Matrix
 	}
 
 	test_cases := []TestCase{

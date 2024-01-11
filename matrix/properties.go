@@ -1,6 +1,6 @@
 package matrix
 
-func IsDiagonal(x matrix) (bool, error) {
+func IsDiagonal(x Matrix) (bool, error) {
 	if b, err := x.isSquare(); !b {
 		return false, err
 	}
@@ -19,7 +19,7 @@ func IsDiagonal(x matrix) (bool, error) {
 	return true, nil
 }
 
-func IsUpperTriangular(x matrix) (bool, error) {
+func IsUpperTriangular(x Matrix) (bool, error) {
 	if b, err := x.isSquare(); !b {
 		return false, err
 	}
@@ -37,6 +37,6 @@ func IsUpperTriangular(x matrix) (bool, error) {
 	return true, nil
 }
 
-func IsLowerTriangular(x matrix) (bool, error) {
+func IsLowerTriangular(x Matrix) (bool, error) {
 	return IsUpperTriangular(Transpose(x))
 }

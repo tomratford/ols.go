@@ -6,7 +6,7 @@ import (
 )
 
 // Helper function to convert slice of slices to a matrix object
-func fromSliceOfSlices(x [][]float64) matrix {
+func fromSliceOfSlices(x [][]float64) Matrix {
 	p := len(x)
 	q := len(x[0])
 
@@ -40,7 +40,7 @@ func TestUpdate(t *testing.T) {
 func TestTranspose(t *testing.T) {
 	type TestCase struct {
 		desc        string
-		input, want matrix
+		input, want Matrix
 	}
 
 	test_cases := []TestCase{
@@ -109,7 +109,7 @@ func TestTranspose(t *testing.T) {
 func TestMultiply(t *testing.T) {
 	type TestCase struct {
 		desc                 string
-		input1, input2, want matrix
+		input1, input2, want Matrix
 	}
 
 	t.Run("fail on invalid multiplication (pxn * nxq)", func(t *testing.T) {
@@ -248,7 +248,7 @@ func TestMultiply(t *testing.T) {
 func TestDet(t *testing.T) {
 	type TestCase struct {
 		desc  string
-		input matrix
+		input Matrix
 		want  float64
 	}
 
@@ -301,7 +301,7 @@ func TestDet(t *testing.T) {
 func TestInverse(t *testing.T) {
 	type TestCase struct {
 		desc        string
-		input, want matrix
+		input, want Matrix
 	}
 
 	t.Run("fail on invalid multiplication (non-square matrix)", func(t *testing.T) {
@@ -374,7 +374,7 @@ func TestInverse(t *testing.T) {
 func TestAdd(t *testing.T) {
 	type TestCase struct {
 		desc                 string
-		input1, input2, want matrix
+		input1, input2, want Matrix
 	}
 
 	t.Run("fail on invalid addition (pxq + nxm)", func(t *testing.T) {

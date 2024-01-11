@@ -8,21 +8,21 @@ import (
 )
 
 /*
-A sparse matrix contains a map of values, indexed by a 2-dim array representing
-the coordinates of the matrix. Where `Values[{0,0}]` is the top leftmost
+A sparse Matrix contains a map of values, indexed by a 2-dim array representing
+the coordinates of the Matrix. Where `Values[{0,0}]` is the top leftmost
 element and `Values[{N,M}]` is the bottome rightmost element.
 */
-type matrix struct {
+type Matrix struct {
 	Values map[[2]int]float64
 	// Number of Rows and Columns
 	N, M int
 }
 
 // Create a `n` x `m` matrix of zeros
-func Zero(n, m int) matrix {
+func Zero(n, m int) Matrix {
 	values := make(map[[2]int]float64, n*m) // Allocate the maximum possible memory
 
-	return matrix{
+	return Matrix{
 		Values: values,
 		N:      n,
 		M:      m,
@@ -30,7 +30,7 @@ func Zero(n, m int) matrix {
 }
 
 // Returns the `n` x `n` identity matrix
-func Identity(n int) matrix {
+func Identity(n int) Matrix {
 	z := Zero(n, n)
 	for i := 0; i < n; i++ {
 		z.Set(i, i, 1)
@@ -39,7 +39,7 @@ func Identity(n int) matrix {
 }
 
 // Helper for consistent error messaging
-func (x *matrix) isSquare() (bool, error) {
+func (x *Matrix) isSquare() (bool, error) {
 	if x.N == x.M {
 		return true, nil
 	} else {
@@ -48,12 +48,12 @@ func (x *matrix) isSquare() (bool, error) {
 }
 
 // Get the value in a matrix at a point
-func (x *matrix) Get(i, j int) float64 {
+func (x *Matrix) Get(i, j int) float64 {
 	return x.Values[[2]int{i, j}]
 }
 
 // Set a matrix value at a point
-func (x *matrix) Set(i, j int, v float64) error {
+func (x *Matrix) Set(i, j int, v float64) error {
 	if i > x.N || j > x.M || i < 0 || j < 0 {
 		return fmt.Errorf("Invalid address")
 	}
@@ -65,7 +65,7 @@ func (x *matrix) Set(i, j int, v float64) error {
 }
 
 // Add to a value at a point
-func (x *matrix) Update(i, j int, v float64) error {
+func (x *Matrix) Update(i, j int, v float64) error {
 	if i > x.N || j > x.M || i < 0 || j < 0 {
 		return fmt.Errorf("Invalid address")
 	}
@@ -77,8 +77,8 @@ func (x *matrix) Update(i, j int, v float64) error {
 }
 
 // Copy a matrix in it's entirety
-func (x *matrix) Copy() matrix {
-	return matrix{
+func (x *Matrix) Copy() Matrix {
+	return Matrix{
 		Values: maps.Clone(x.Values), // OK to use as we are a shallow map
 		N:      x.N,
 		M:      x.M,
@@ -86,7 +86,7 @@ func (x *matrix) Copy() matrix {
 }
 
 // Check is two matrices are equal
-func Equal(x, y matrix) bool {
+func Equal(x, y Matrix) bool {
 	if !(x.N == y.N && x.M == y.M) {
 		return false
 	}
@@ -113,7 +113,7 @@ func Equal(x, y matrix) bool {
 // This value is used for comparisons to check for fuzz
 var Fuzz = 1.0e-14
 
-func (x *matrix) fuzzCheck() {
+func (x *Matrix) fuzzCheck() {
 	for k, v := range x.Values {
 		if v == 0 || math.Abs(v) < Fuzz {
 			delete(x.Values, k)
@@ -122,9 +122,9 @@ func (x *matrix) fuzzCheck() {
 }
 
 // Returns the transpose of matrix `x`
-func Transpose(x matrix) matrix {
+func Transpose(x Matrix) Matrix {
 	// Empty matrix
-	if reflect.DeepEqual(x, matrix{}) {
+	if reflect.DeepEqual(x, Matrix{}) {
 		return x
 	}
 
@@ -138,9 +138,9 @@ func Transpose(x matrix) matrix {
 }
 
 // Performs matrix multiplication between matrices `x` and `y`
-func Multiply(x matrix, y matrix) (matrix, error) {
+func Multiply(x Matrix, y Matrix) (Matrix, error) {
 	if x.M != y.N {
-		return matrix{}, fmt.Errorf("Expected the number of `x` columns to be the same as the number of `y` rows")
+		return Matrix{}, fmt.Errorf("Expected the number of `x` columns to be the same as the number of `y` rows")
 	}
 
 	z := Zero(x.N, y.M)
@@ -159,9 +159,9 @@ func Multiply(x matrix, y matrix) (matrix, error) {
 }
 
 // Returns matrices `x` and `y` added together
-func Add(x, y matrix) (matrix, error) {
+func Add(x, y Matrix) (Matrix, error) {
 	if x.N != y.N && x.M != y.M {
-		return matrix{}, fmt.Errorf("`x` and `y` must be of the same dimension")
+		return Matrix{}, fmt.Errorf("`x` and `y` must be of the same dimension")
 	}
 
 	z := Zero(x.N, x.M)
@@ -176,7 +176,7 @@ func Add(x, y matrix) (matrix, error) {
 }
 
 // Returns matrix `x` scaled by factor `a`
-func Scale(x matrix, a float64) matrix {
+func Scale(x Matrix, a float64) Matrix {
 	z := Zero(x.N, x.M)
 
 	for i := 0; i < x.N; i++ {
@@ -189,7 +189,7 @@ func Scale(x matrix, a float64) matrix {
 }
 
 // returns the determinant of matrix `x`
-func Det(x matrix) (float64, error) {
+func Det(x Matrix) (float64, error) {
 	if b, err := x.isSquare(); !b {
 		return 0.0, err
 	}
@@ -217,9 +217,9 @@ func Det(x matrix) (float64, error) {
 }
 
 // Returns the inverse of matrix `x`
-func Inverse(x matrix) (matrix, error) {
+func Inverse(x Matrix) (Matrix, error) {
 	if b, err := x.isSquare(); !b {
-		return matrix{}, err
+		return Matrix{}, err
 	}
 
 	// some simple cases we can account
@@ -227,10 +227,10 @@ func Inverse(x matrix) (matrix, error) {
 	case 2:
 		det, err := Det(x)
 		if err != nil {
-			return matrix{}, err
+			return Matrix{}, err
 		}
 		if det == 0 {
-			return matrix{}, fmt.Errorf("No inverse (determinant = 0)")
+			return Matrix{}, fmt.Errorf("No inverse (determinant = 0)")
 		}
 		z := Zero(x.N, x.M)
 		z.Set(0, 0, x.Get(1, 1))
@@ -261,7 +261,7 @@ func Inverse(x matrix) (matrix, error) {
 			return p, fmt.Errorf("Overflowed rows => not invertible, j = %d", j)
 		}
 		if j >= x.M {
-			return matrix{}, fmt.Errorf("Overflowed columns => not invertible, i = %d", i)
+			return Matrix{}, fmt.Errorf("Overflowed columns => not invertible, i = %d", i)
 		}
 
 		// find pivot
@@ -275,11 +275,11 @@ func Inverse(x matrix) (matrix, error) {
 					var err error
 					z, err = SwapRows(z, i, k)
 					if err != nil {
-						return matrix{}, err
+						return Matrix{}, err
 					}
 					p, err = SwapRows(p, i, k) // We need to track permutations too
 					if err != nil {
-						return matrix{}, err
+						return Matrix{}, err
 					}
 					break
 				}
@@ -294,21 +294,21 @@ func Inverse(x matrix) (matrix, error) {
 				scale := z.Get(i, j)
 				z, err = ScaleRow(z, i, 1/scale) // Convert row so pivot is 1
 				if err != nil {
-					return matrix{}, nil
+					return Matrix{}, nil
 				}
 				p, err = ScaleRow(p, i, 1/scale)
 				if err != nil {
-					return matrix{}, nil
+					return Matrix{}, nil
 				}
 			} else {
 				scale := -(z.Get(k, j) / z.Get(i, j))
 				z, err = AddToRow(z, k, i, scale) // Add row scaled row i to row k
 				if err != nil {
-					return matrix{}, err
+					return Matrix{}, err
 				}
 				p, err = AddToRow(p, k, i, scale) // Add row scaled row i to row k
 				if err != nil {
-					return matrix{}, err
+					return Matrix{}, err
 				}
 			}
 		}

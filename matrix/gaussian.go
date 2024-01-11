@@ -3,12 +3,12 @@ package matrix
 import "fmt"
 
 // Swap two rows
-func SwapRows(x matrix, row1, row2 int) (matrix, error) {
+func SwapRows(x Matrix, row1, row2 int) (Matrix, error) {
 	if row1 > x.N {
-		return matrix{}, fmt.Errorf("row1 out of range. %d > %d", row1, x.N)
+		return Matrix{}, fmt.Errorf("row1 out of range. %d > %d", row1, x.N)
 	}
 	if row2 > x.N {
-		return matrix{}, fmt.Errorf("row2 out of range. %d > %d", row2, x.N)
+		return Matrix{}, fmt.Errorf("row2 out of range. %d > %d", row2, x.N)
 	}
 
 	// Implemented via matrix multiplication - less efficient but should be OK
@@ -24,9 +24,9 @@ func SwapRows(x matrix, row1, row2 int) (matrix, error) {
 }
 
 // Scale a row by a factor
-func ScaleRow(x matrix, row int, scale float64) (matrix, error) {
+func ScaleRow(x Matrix, row int, scale float64) (Matrix, error) {
 	if row > x.N {
-		return matrix{}, fmt.Errorf("row1 out of range. %d > %d", row, x.N)
+		return Matrix{}, fmt.Errorf("row1 out of range. %d > %d", row, x.N)
 	}
 
 	// Implemented via matrix multiplication - less efficient but should be OK
@@ -38,12 +38,12 @@ func ScaleRow(x matrix, row int, scale float64) (matrix, error) {
 }
 
 // Add a multiple of one row to the other
-func AddToRow(x matrix, row1, row2 int, scale float64) (matrix, error) {
+func AddToRow(x Matrix, row1, row2 int, scale float64) (Matrix, error) {
 	if row1 > x.N {
-		return matrix{}, fmt.Errorf("row1 out of range. %d > %d", row1, x.N)
+		return Matrix{}, fmt.Errorf("row1 out of range. %d > %d", row1, x.N)
 	}
 	if row2 > x.N {
-		return matrix{}, fmt.Errorf("row2 out of range. %d > %d", row2, x.N)
+		return Matrix{}, fmt.Errorf("row2 out of range. %d > %d", row2, x.N)
 	}
 
 	// Implemented via matrix multiplication - less efficient but should be OK
@@ -55,7 +55,7 @@ func AddToRow(x matrix, row1, row2 int, scale float64) (matrix, error) {
 }
 
 // Return a matrix in echelon form alongside a permutation matrix
-func GaussianElimination(x matrix) (matrix, matrix, error) {
+func GaussianElimination(x Matrix) (Matrix, Matrix, error) {
 	z := x.Copy()
 	p := Identity(x.N) // Permutation matrix
 
@@ -88,11 +88,11 @@ func GaussianElimination(x matrix) (matrix, matrix, error) {
 					var err error
 					z, err = SwapRows(z, i, k)
 					if err != nil {
-						return matrix{}, matrix{}, err
+						return Matrix{}, Matrix{}, err
 					}
 					p, err = SwapRows(p, i, k) // We need to track permutations too
 					if err != nil {
-						return matrix{}, matrix{}, err
+						return Matrix{}, Matrix{}, err
 					}
 					break
 				}
@@ -106,7 +106,7 @@ func GaussianElimination(x matrix) (matrix, matrix, error) {
 			scale := -(z.Get(k, j) / z.Get(i, j))
 			z, err = AddToRow(z, k, i, scale) // Add row scaled row i to row k
 			if err != nil {
-				return matrix{}, matrix{}, err
+				return Matrix{}, Matrix{}, err
 			}
 		}
 
