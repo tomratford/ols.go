@@ -54,10 +54,10 @@ func main() {
 
 	n := len(records) - 1
 	m := len(records[0]) - 1
-	y := matrix.Zero(n,1)
-	X := matrix.Zero(n,m)
+	y := matrix.Zero(n, 1)
+	X := matrix.Zero(n, m)
 	for i, row := range records[1:] {
-		X.Set(i,0,1) // intercept
+		X.Set(i, 0, 1) // intercept
 		for j, v := range row {
 			if v == "" {
 				break
@@ -68,9 +68,9 @@ func main() {
 				os.Exit(1)
 			}
 			if j == y_ind {
-				y.Set(i,0,val)
+				y.Set(i, 0, val)
 			} else if key, ok := Xs_ind[j]; ok {
-				X.Set(i,key,val)
+				X.Set(i, key, val)
 			} else {
 				continue
 			}
@@ -114,7 +114,7 @@ func main() {
 
 	mod := model{
 		fitted: fitted,
-		coef: coef,
+		coef:   coef,
 	}
 
 	fmt.Println(mod.coef)
