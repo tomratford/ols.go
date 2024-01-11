@@ -14,6 +14,7 @@ y <- betas[1] * x1 + betas[2] * x2 + betas[3] * x3 + err
 data <- data.frame(y, x1, x2, x3)
 
 # Check diagnostics
-# lm(y ~ x1 + x2 + x3, data) |> summary()
+mod <- lm(y ~ x1 + x2 + x3, data)
 
-write.csv(data, "input.csv")
+# to save for the future
+# write.csv(data, "input.csv")
