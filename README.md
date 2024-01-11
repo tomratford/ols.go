@@ -19,7 +19,7 @@ y,x1,x2,x3
 
 ## Goals
 
-* [ ] Support OLS of continuous exploratory variables versus a continuous response variable
+* [X] Support OLS of continuous exploratory variables versus a continuous response variable
 * [ ] Support input in the classic R formula style
 * [ ] Factor variable support
 * [ ] Support interactions between values
