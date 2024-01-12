@@ -21,6 +21,7 @@ y,x1,x2,x3
 
 * [X] Support OLS of continuous exploratory variables versus a continuous response variable
 * [ ] Support input in the classic R formula style
+* [ ] Calcuate stddev for each variable
 * [ ] Factor variable support
 * [ ] Support interactions between values
 * [ ] Support formats other than CSV
