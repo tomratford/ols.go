@@ -3,13 +3,14 @@ package main
 import (
 	"encoding/csv"
 	"fmt"
+	"log"
 	"ols/matrix"
 	"os"
 	"strconv"
 )
 
 func usage() {
-	fmt.Printf("usage: ols <input.csv> <response> ~ [exploratory]\n")
+	fmt.Print("usage: ols <input.csv> <response> ~ [exploratory]\n")
 }
 
 func main() {
@@ -22,24 +23,23 @@ func main() {
 	// Check if the error is that the file isn't real
 	if os.IsNotExist(err) {
 		usage()
-		fmt.Printf("error: file '%s' does not exist\n", os.Args[1])
-		os.Exit(1)
+		log.Fatalf("error: file '%s' does not exist\n", os.Args[1])
 	} else if err != nil {
 		usage()
-		fmt.Println(err)
-		os.Exit(1)
+		log.Fatal(err)
 	}
 
 	mod, err := OLS(records, "y", []string{"x1", "x2", "x3", "x4"})
 	if err != nil {
-		fmt.Println(err)
-		os.Exit(1)
+		log.Fatal(err)
 	}
 
-	fmt.Println(mod.coef)
+	fmt.Print(mod.coef)
 }
 
 type model struct {
+	dep string
+	ind []string
 	fitted, coef matrix.Matrix
 }
 
@@ -117,6 +117,8 @@ func OLS(records [][]string, D string, Es []string) (model, error) {
 	}
 
 	mod := model{
+		dep: D,
+		ind: Es,
 		fitted: fitted,
 		coef:   coef,
 	}
