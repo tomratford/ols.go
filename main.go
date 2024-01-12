@@ -6,15 +6,10 @@ import (
 	"ols/matrix"
 	"os"
 	"strconv"
-	"strings"
 )
 
 func usage() {
 	fmt.Printf("usage: ols <input.csv> <response> ~ [exploratory]\n")
-}
-
-type model struct {
-	fitted, coef matrix.Matrix
 }
 
 func main() {
@@ -35,19 +30,34 @@ func main() {
 		os.Exit(1)
 	}
 
-	// For now assume:
+	mod, err := OLS(records, "y", []string{"x1", "x2", "x3", "x4"})
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+
+	fmt.Println(mod.coef)
+}
+
+type model struct {
+	fitted, coef matrix.Matrix
+}
+
+func OLS(records [][]string, D string, Es []string) (model, error) {
+	// For assume:
 	//  - the first row is names
-	//      all names beginning with X are X values, single y column
 	names := records[0]
 	Xs_ind := make(map[int]int, len(names))
 	var y_ind int
 	counter := 1
 	for i, name := range names {
-		if strings.HasPrefix(strings.ToLower(name), "x") {
-			Xs_ind[i] = counter
-			counter += 1
+		for _, E := range Es {
+			if name == E {
+				Xs_ind[i] = counter
+				counter += 1
+			}
 		}
-		if strings.ToLower(name) == "y" {
+		if name == D {
 			y_ind = i
 		}
 	}
@@ -80,36 +90,30 @@ func main() {
 	xT := matrix.Transpose(X)
 	xTx, err := matrix.Multiply(xT, X)
 	if err != nil {
-		fmt.Println(err)
-		os.Exit(1)
+		return model{}, err
 	}
 	xTx_inv, err := matrix.Inverse(xTx)
 	if err != nil {
-		fmt.Println(err)
-		os.Exit(1)
+		return model{}, err
 	}
 	xTx_inv_xT, err := matrix.Multiply(xTx_inv, xT)
 	if err != nil {
-		fmt.Println(err)
-		os.Exit(1)
+		return model{}, err
 	}
 
 	hat, err := matrix.Multiply(X, xTx_inv_xT)
 	if err != nil {
-		fmt.Println(err)
-		os.Exit(1)
+		return model{}, err
 	}
 
 	fitted, err := matrix.Multiply(hat, y)
 	if err != nil {
-		fmt.Println(err)
-		os.Exit(1)
+		return model{}, err
 	}
 
 	coef, err := matrix.Multiply(xTx_inv_xT, y)
 	if err != nil {
-		fmt.Println(err)
-		os.Exit(1)
+		return model{}, err
 	}
 
 	mod := model{
@@ -117,7 +121,7 @@ func main() {
 		coef:   coef,
 	}
 
-	fmt.Println(mod.coef)
+	return mod, nil
 }
 
 func ReadFromCSV(filepath string) ([][]string, error) {
