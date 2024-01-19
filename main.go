@@ -99,9 +99,8 @@ func OLS(records [][]string, D string, Es []string) (model, error) {
 	}
 
 	n := len(records) - 1
-	m := len(records[0]) - 1
 	y := matrix.Zero(n, 1)
-	X := matrix.Zero(n, m)
+	X := matrix.Zero(n, counter)
 	for i, row := range records[1:] {
 		X.Set(i, 0, 1) // intercept
 		for j, v := range row {
