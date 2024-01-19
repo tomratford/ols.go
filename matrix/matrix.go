@@ -224,6 +224,14 @@ func Inverse(x Matrix) (Matrix, error) {
 
 	// some simple cases we can account
 	switch x.M {
+	case 1:
+		z := Zero(x.N, x.M)
+		if v := x.Get(0, 0); v != 0 {
+			z.Set(0, 0, 1/x.Get(0, 0))
+			return z, nil
+		} else {
+			return Matrix{}, fmt.Errorf("No inverse")
+		}
 	case 2:
 		det, err := Det(x)
 		if err != nil {
