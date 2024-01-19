@@ -2,34 +2,70 @@ package main
 
 import (
 	"encoding/csv"
+	"flag"
 	"fmt"
 	"log"
 	"ols/matrix"
 	"os"
+	"slices"
 	"strconv"
 )
 
-func usage() {
-	fmt.Print("usage: ols <input.csv> <response> ~ [exploratory]\n")
+func init() {
+	flag.Usage = func() {
+		fmt.Print("usage: ols <input.csv> <response> ~ [exploratory]\n")
+	}
+	flag.Parse()
+}
+
+func ParseEq(eq []string) (string, []string, error) {
+	home, err := os.UserHomeDir()
+	if err != nil {
+		return "", []string{}, err
+	}
+
+	if eq[1] != home {
+		return "", []string{}, fmt.Errorf("Expected tilde")
+	}
+
+	args := slices.DeleteFunc(eq[2:], func(s string) bool {
+		return s == "+"
+	})
+
+	return eq[0], args, nil
 }
 
 func main() {
-	if len(os.Args) < 2 {
-		usage()
+	args := flag.Args()
+	if len(args) < 1 {
+		flag.Usage()
 	}
+	records, err := ReadFromCSV(args[0])
 
-	records, err := ReadFromCSV(os.Args[1])
+	var y string
+	var xs []string
+	if len(args) > 1 {
+		var err error
+		y, xs, err = ParseEq(args[1:])
+		if err != nil {
+			flag.Usage()
+			log.Fatal(err)
+		}
+	} else {
+		y = records[0][0]
+		xs = records[0][1:]
+	}
 
 	// Check if the error is that the file isn't real
 	if os.IsNotExist(err) {
-		usage()
-		log.Fatalf("error: file '%s' does not exist\n", os.Args[1])
+		flag.Usage()
+		log.Fatalf("error: file '%s' does not exist\n", args[0])
 	} else if err != nil {
-		usage()
+		flag.Usage()
 		log.Fatal(err)
 	}
 
-	mod, err := OLS(records, "y", []string{"x1", "x2", "x3", "x4"})
+	mod, err := OLS(records, y, xs)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -38,8 +74,8 @@ func main() {
 }
 
 type model struct {
-	dep string
-	ind []string
+	dep          string
+	ind          []string
 	fitted, coef matrix.Matrix
 }
 
@@ -117,8 +153,8 @@ func OLS(records [][]string, D string, Es []string) (model, error) {
 	}
 
 	mod := model{
-		dep: D,
-		ind: Es,
+		dep:    D,
+		ind:    Es,
 		fitted: fitted,
 		coef:   coef,
 	}
