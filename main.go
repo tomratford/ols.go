@@ -55,7 +55,6 @@ func main() {
 		y = records[0][0]
 		xs = records[0][1:]
 	}
-
 	// Check if the error is that the file isn't real
 	if os.IsNotExist(err) {
 		flag.Usage()
@@ -75,7 +74,9 @@ func main() {
 
 type model struct {
 	dep          string
+	dep_n        int
 	ind          []string
+	ind_n        map[int]int
 	fitted, coef matrix.Matrix
 }
 
@@ -153,7 +154,9 @@ func OLS(records [][]string, D string, Es []string) (model, error) {
 
 	mod := model{
 		dep:    D,
+		dep_n:  y_ind,
 		ind:    Es,
+		ind_n:  Xs_ind,
 		fitted: fitted,
 		coef:   coef,
 	}
