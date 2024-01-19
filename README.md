@@ -1,4 +1,4 @@
-# OLS
+# GOLS
 
 This is my attempts at implementing ordinary least squares in Go.
 
